@@ -298,11 +298,11 @@ if __name__ == "__main__":
                 start()
                 printc("Installation completed!", col.OKGREEN, 2)
                 if rType.upper() == "MAIN":
-                    printc("Please store your MySQL password!")
-                    printc(rPassword)
-                    printc("Admin UI Wan IP: http://%s:25500" % getIP())
-                    printc("Admin UI Lan IP: http://%s:25500" % getLanIP())
-                    printc("Admin UI default login is admin/admin")
+                    printc("Please store your MySQL password!", col.OKGREEN, 2)
+                    printc(rPassword, col.OKGREEN, 2)
+                    printc("Admin UI Wan IP: http://%s:25500" % getIP(), col.OKGREEN, 2)
+                    printc("Admin UI Lan IP: http://%s:25500" % getLanIP(), col.OKGREEN, 2)
+                    printc("Admin UI default login is admin/admin", col.OKGREEN, 2)
                 rType = "UPDATE"
                 if os.path.exists("/home/xtreamcodes/iptv_xtream_codes/wwwdir/api.php"):
                    printc("Update Admin Panel? Y/N?", col.WARNING)
