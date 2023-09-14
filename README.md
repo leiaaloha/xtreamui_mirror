@@ -15,7 +15,7 @@ sudo dpkg -i libssl1.1_1.1.1-1ubuntu2.1~18.04.23_amd64.deb
 
 wget http://mirrors.kernel.org/ubuntu/pool/universe/libz/libzip/libzip5_1.5.1-0ubuntu1_amd64.deb
 
-echo APT::Sandbox::User "root"; > /etc/apt/apt.conf.d/10sandbox
+echo "APT::Sandbox::User \"root\";" > /etc/apt/apt.conf.d/10sandbox
 
 sudo apt install ./libzip5_1.5.1-0ubuntu1_amd64.deb
 
