@@ -1,6 +1,20 @@
-# Xtream UI for Ubuntu 20.04 install
-This is an installation mirror for xtream ui software on Ubuntu 20.04.
+# Xtream UI for Ubuntu 22.04 install
+This is an installation mirror for xtream ui software on Ubuntu 22.04.
 Includes NGINX 1.19.2 and PHP 7.3.25.
+
+Required to run
+sudo apt update;
+sudo apt upgrade -y
+sudo apt install  -y python-is-python3
+wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1-1ubuntu2.1~18.04.23_amd64.deb
+sudo dpkg -i libssl1.1_1.1.1-1ubuntu2.1~18.04.23_amd64.deb
+wget http://mirrors.kernel.org/ubuntu/pool/universe/libz/libzip/libzip5_1.5.1-0ubuntu1_amd64.deb
+echo APT::Sandbox::User "root"; > /etc/apt/apt.conf.d/10sandbox
+sudo apt install ./libzip5_1.5.1-0ubuntu1_amd64.deb
+sudo reboot (YES REBOOT)
+wget https://github.com/leiaaloha/xtreamui_mirror/raw/master/install3.py;
+sudo python3 install3.py;
+
 
 ### Update 08/03/2021: ###
 - No planned update to come
