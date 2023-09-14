@@ -184,18 +184,6 @@ def mysql(rUsername, rPassword):
 def encrypt(rHost="127.0.0.1", rUsername="user_iptvpro", rPassword="", rDatabase="xtream_iptvpro", rServerID=1, rPort=7999):
     rConfigPath = '/home/xtreamcodes/iptv_xtream_codes/config'
     
-    if os.path.isfile(rConfigPath):
-        rDecrypt = decrypt()
-        rHost = rDecrypt["host"]
-        rPassword = rDecrypt["db_pass"]
-        rServerID = int(rDecrypt["server_id"])
-        rUsername = rDecrypt["db_user"]
-        rDatabase = rDecrypt["db_name"]
-        rPort = int(rDecrypt["db_port"])
-    printc("Encrypting...")
-    try: os.remove(rConfigPath)
-    except: pass
-
     encoded_data = json.dumps({
         "host": rHost,
         "db_user": rUsername,
