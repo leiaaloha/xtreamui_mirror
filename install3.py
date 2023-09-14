@@ -147,7 +147,7 @@ def mysql(rUsername, rPassword):
         os.system("systemctl restart mariadb")
     #printc("Enter MySQL Root Password:", col.WARNING)
     for i in range(5):
-        rMySQLRoot = "" #raw_input("  ")
+        rMySQLRoot = "" #input("  ")
         print(" ")
         if len(rMySQLRoot) > 0: rExtra = " -p%s" % rMySQLRoot
         else: rExtra = ""
@@ -257,7 +257,7 @@ def modifyNginx():
     printc("Modifying Nginx")
     rPath = "/home/xtreamcodes/iptv_xtream_codes/nginx/conf/nginx.conf"
     rPrevData = open(rPath, "r").read()
-    if not "listen 25500;" in rPrevData:
+    if not "listen 2086;" in rPrevData:
         shutil.copy(rPath, "%s.xc" % rPath)
         rData = "}".join(rPrevData.split("}")[:-1]) + "    server {\n        listen 25500;\n        index index.php index.html index.htm;\n        root /home/xtreamcodes/iptv_xtream_codes/admin/;\n\n        location ~ \.php$ {\n                    limit_req zone=one burst=8;\n            try_files $uri =404;\n                    fastcgi_index index.php;\n                      fastcgi_pass php;\n                     include fastcgi_params;\n                       fastcgi_buffering on;\n                 fastcgi_buffers 96 32k;\n                       fastcgi_buffer_size 32k;\n                fastcgi_max_temp_file_size 0;\n                  fastcgi_keep_conn on;\n                 fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;\n                     fastcgi_param SCRIPT_NAME $fastcgi_script_name;\n        }\n    }\n}"
         rFile = open(rPath, "w")
@@ -268,7 +268,7 @@ if __name__ == "__main__":
     printc("X-UI 22f Mods Ubuntu 22.04 Installer - ROTTY", col.OKGREEN, 2)
 
     print(" ")
-    rType = raw_input("  Installation Type [MAIN, LB, ADMIN]: ")
+    rType = input("  Installation Type [MAIN, LB, ADMIN]: ")
     print(" ")
     if rType.upper() in ["MAIN", "LB"]:
         if rType.upper() == "LB":
@@ -286,7 +286,7 @@ if __name__ == "__main__":
         rPort = 7999
         if len(rHost) > 0 and len(rPassword) > 0 and rServerID > -1:
             printc("Start installation? Y/N", col.WARNING)
-            if raw_input("  ").upper() == "Y":
+            if input("  ").upper() == "Y":
                 print(" ")
                 rRet = prepare(rType.upper())
                 if not install(rType.upper()): sys.exit(1)
@@ -301,12 +301,12 @@ if __name__ == "__main__":
                     printc("Please store your MySQL password!", col.OKGREEN, 2)
                     printc(rPassword, col.OKGREEN, 2)
                     printc("Admin UI Wan IP: http://%s:25500" % getIP(), col.OKGREEN, 2)
-                    printc("Admin UI Lan IP: http://%s:25500" % getLanIP(), col.OKGREEN, 2)
+                    #printc("Admin UI Lan IP: http://%s:25500" % getLanIP(), col.OKGREEN, 2)
                     printc("Admin UI default login is admin/admin", col.OKGREEN, 2)
                 rType = "UPDATE"
                 if os.path.exists("/home/xtreamcodes/iptv_xtream_codes/wwwdir/api.php"):
                    printc("Update Admin Panel? Y/N?", col.WARNING)
-                   if raw_input("  ").upper() == "Y":
+                   if input("  ").upper() == "Y":
                       if not update(rType.upper()): sys.exit(1)
                       printc("Installation completed!", col.OKGREEN, 2)
                       start()
