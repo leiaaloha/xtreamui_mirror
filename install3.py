@@ -182,7 +182,9 @@ def mysql(rUsername, rPassword):
     return False
 
 def encrypt(rHost="127.0.0.1", rUsername="user_iptvpro", rPassword="", rDatabase="xtream_iptvpro", rServerID=1, rPort=7999):
-    if os.path.isfile('/home/xtreamcodes/iptv_xtream_codes/config'):
+    rConfigPath = '/home/xtreamcodes/iptv_xtream_codes/config'
+    
+    if os.path.isfile(rConfigPath):
         rDecrypt = decrypt()
         rHost = rDecrypt["host"]
         rPassword = rDecrypt["db_pass"]
@@ -191,20 +193,39 @@ def encrypt(rHost="127.0.0.1", rUsername="user_iptvpro", rPassword="", rDatabase
         rDatabase = rDecrypt["db_name"]
         rPort = int(rDecrypt["db_port"])
     printc("Encrypting...")
-    try: os.remove("/home/xtreamcodes/iptv_xtream_codes/config")
+    try: os.remove(rConfigPath)
     except: pass
 
+    encoded_data = json.dumps({
+        "host": rInfo,
+        "db_user": rUsername,
+        "db_pass": rPassword,
+        "db_name": rDatabase,
+        "server_id": int(rServerID),
+        "db_port": int(rPort)
+    })
     rf = open('/home/xtreamcodes/iptv_xtream_codes/config', 'wb')
-    lestring=''.join(chr(ord(c)^ord(k)) for c,k in zip('{\"host\":\"%s\",\"db_user\":\"%s\",\"db_pass\":\"%s\",\"db_name\":\"%s\",\"server_id\":\"%d\", \"db_port\":\"%d\"}' % (rHost, rUsername, rPassword, rDatabase, rServerID, rPort), cycle('5709650b0d7806074842c6de575025b1')))
-    rf.write(base64.b64encode(bytes(lestring, 'ascii')))
-    rf.close()
+    key = b'5709650b0d7806074842c6de575025b1'  # Use bytes for the key
+    encrypted_data = bytearray()
 
+    for c1, c2 in zip(encoded_data.encode(), cycle(key)):
+        encrypted_data.append(c1 ^ int(c2))
+
+    with open(rConfigPath, 'wb') as rf:
+        encoded_data = base64.b64encode(encrypted_data).decode().replace('\n', '')
+        rf.write(encoded_data.encode())  # Encode the string as bytes before writing    
 
 def decrypt():
-    rConfigPath = "/home/xtreamcodes/iptv_xtream_codes/config"
-    try: return json.loads(''.join(chr(c^ord(k)) for c,k in zip(base64.b64decode(open(rConfigPath, 'rb').read()), cycle('5709650b0d7806074842c6de575025b1'))))
-    except: return None
-
+    try:
+        with open(rConfigPath, 'rb') as file:
+            encoded_data = file.read()
+            decoded_data = base64.b64decode(encoded_data)
+            key = b'5709650b0d7806074842c6de575025b1'  # Use bytes for the key
+            decrypted_data = bytes(c1 ^ c2 for c1, c2 in zip(decoded_data, cycle(key)))
+            return json.loads(decrypted_data.decode())
+    except Exception as err:
+        print(err)
+        return None
 
 def configure():
     printc("Configuring System")
