@@ -197,7 +197,7 @@ def encrypt(rHost="127.0.0.1", rUsername="user_iptvpro", rPassword="", rDatabase
     except: pass
 
     encoded_data = json.dumps({
-        "host": rInfo,
+        "host": rHost,
         "db_user": rUsername,
         "db_pass": rPassword,
         "db_name": rDatabase,
