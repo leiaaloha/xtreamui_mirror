@@ -39,7 +39,7 @@ def getVersion():
     try: return subprocess.check_output("lsb_release -d".split()).split(":")[-1].strip()
     except: return ""
 
-def printc(rText, rColour=col.OKBLUE, rPadding=0):
+def print(rText, rColour=col.OKBLUE, rPadding=0):
     print("%s ┌─────────────────────────────────────────────────┐ %s" % (rColour, col.ENDC))
     for i in range(rPadding): print("%s │                                                 │ %s" % (rColour, col.ENDC))
     print("%s │ %s%s%s │ %s" % (rColour, " "*round(23-(len(rText)/2)), rText, " "*round(46-(22-(len(rText)/2))-len(rText)), col.ENDC))
@@ -50,7 +50,7 @@ def printc(rText, rColour=col.OKBLUE, rPadding=0):
 def prepare(rType="MAIN"):
     global rPackages
     if rType != "MAIN": rPackages = rPackages[:-3]
-    printc("Preparing Installation")
+    print("Preparing Installation")
     if os.path.isfile('/home/xtreamcodes/iptv_xtream_codes/config'):
         shutil.copyfile('/home/xtreamcodes/iptv_xtream_codes/config', '/tmp/config.xtmp')
     os.system('chattr -i /home/xtreamcodes/iptv_xtream_codes/GeoLite2.mmdb > /dev/null')
@@ -59,13 +59,13 @@ def prepare(rType="MAIN"):
         except: pass
     os.system("apt-get update > /dev/null")
     os.system("apt-get full-upgrade -y > /dev/null")
-    printc("Install MariaDB 10.5 repository")
+    print("Install MariaDB 10.5 repository")
     os.system("apt-get -y install software-properties-common > /dev/null")
     os.system("apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xF1656F24C74CD1D8 >/dev/null 2>&1")
     os.system("add-apt-repository 'deb [arch=amd64,arm64,ppc64el] http://mirror.lstn.net/mariadb/repo/10.5/ubuntu focal main'  > /dev/null")
     os.system("apt-get update > /dev/null")
     for rPackage in rPackages:
-        printc("Installing %s" % rPackage)
+        print("Installing %s" % rPackage)
         os.system("apt-get install %s -y > /dev/null" % rPackage)
 
     os.system("apt-get install -f > /dev/null") # Clean up above
@@ -73,26 +73,26 @@ def prepare(rType="MAIN"):
         subprocess.check_output("getent passwd xtreamcodes > /dev/null".split())
     except:
         # Create User
-        printc("Creating user xtreamcodes")
+        print("Creating user xtreamcodes")
         os.system("adduser --system --shell /bin/false --group --disabled-login xtreamcodes > /dev/null")
     if not os.path.exists("/home/xtreamcodes"): os.mkdir("/home/xtreamcodes")
     return True
 
 def install(rType="MAIN"):
     global rInstall, rDownloadURL
-    printc("Downloading Software")
+    print("Downloading Software")
     try: rURL = rDownloadURL[rInstall[rType]]
     except:
-        printc("Invalid download URL!", col.FAIL)
+        print("Invalid download URL!", col.FAIL)
         return False
     os.system('wget -q -O "/tmp/xtreamcodes.tar.gz" "%s"' % rURL)
     if os.path.exists("/tmp/xtreamcodes.tar.gz"):
-        printc("Installing Software")
+        print("Installing Software")
         os.system('tar -zxvf "/tmp/xtreamcodes.tar.gz" -C "/home/xtreamcodes/" > /dev/null')
         try: os.remove("/tmp/xtreamcodes.tar.gz")
         except: pass
         return True
-    printc("Failed to download installation file!", col.FAIL)
+    print("Failed to download installation file!", col.FAIL)
     return False
 
 def update(rType="MAIN"):
@@ -109,33 +109,33 @@ def update(rType="MAIN"):
     try:
         urllib.request.urlopen(req)
     except:
-        printc("Invalid download URL!", col.FAIL)
+        print("Invalid download URL!", col.FAIL)
         return False
     print("\n")
     rURL = rlink
-    printc("Downloading Software Update")
+    print("Downloading Software Update")
     print("\n")
     os.system('wget -q -O "/tmp/update.zip" "%s"' % rURL)
     if os.path.exists("/tmp/update.zip"):
         try: is_ok = zipfile.ZipFile("/tmp/update.zip")
         except:
-            printc("Invalid link or zip file is corrupted!", col.FAIL)
+            print("Invalid link or zip file is corrupted!", col.FAIL)
             os.remove("/tmp/update.zip")
             return False
-        printc("Updating Software")
+        print("Updating Software")
         os.system('chattr -i /home/xtreamcodes/iptv_xtream_codes/GeoLite2.mmdb > /dev/null && rm -rf /home/xtreamcodes/iptv_xtream_codes/admin > /dev/null && rm -rf /home/xtreamcodes/iptv_xtream_codes/pytools > /dev/null && unzip /tmp/update.zip -d /tmp/update/ > /dev/null && cp -rf /tmp/update/XtreamUI-master/* /home/xtreamcodes/iptv_xtream_codes/ > /dev/null && rm -rf /tmp/update/XtreamUI-master > /dev/null && rm -rf /tmp/update > /dev/null && chown -R xtreamcodes:xtreamcodes /home/xtreamcodes/ > /dev/null && chmod +x /home/xtreamcodes/iptv_xtream_codes/permissions.sh > /dev/null && chattr +i /home/xtreamcodes/iptv_xtream_codes/GeoLite2.mmdb > /dev/null')
         if not "sudo chmod 400 /home/xtreamcodes/iptv_xtream_codes/config" in open("/home/xtreamcodes/iptv_xtream_codes/permissions.sh").read(): os.system('echo "#!/bin/bash\nsudo chmod -R 777 /home/xtreamcodes 2>/dev/null\nsudo find /home/xtreamcodes/iptv_xtream_codes/admin/ -type f -exec chmod 644 {} \; 2>/dev/null\nsudo find /home/xtreamcodes/iptv_xtream_codes/admin/ -type d -exec chmod 755 {} \; 2>/dev/null\nsudo find /home/xtreamcodes/iptv_xtream_codes/wwwdir/ -type f -exec chmod 644 {} \; 2>/dev/null\nsudo find /home/xtreamcodes/iptv_xtream_codes/wwwdir/ -type d -exec chmod 755 {} \; 2>/dev/null\nsudo chmod +x /home/xtreamcodes/iptv_xtream_codes/nginx/sbin/nginx 2>/dev/null\nsudo chmod +x /home/xtreamcodes/iptv_xtream_codes/nginx_rtmp/sbin/nginx_rtmp 2>/dev/null\nsudo chmod 400 /home/xtreamcodes/iptv_xtream_codes/config 2>/dev/null" > /home/xtreamcodes/iptv_xtream_codes/permissions.sh')
         os.system("/home/xtreamcodes/iptv_xtream_codes/permissions.sh > /dev/null")
         try: os.remove("/tmp/update.zip")
         except: pass
         return True
-    printc("Failed to download installation file!", col.FAIL)
+    print("Failed to download installation file!", col.FAIL)
     return False
 
 
 def mysql(rUsername, rPassword):
     global rMySQLCnf
-    printc("Configuring MySQL")
+    print("Configuring MySQL")
     rCreate = True
     if os.path.exists("/etc/mysql/my.cnf"):
         if open("/etc/mysql/my.cnf", "r").read(14) == "# Xtream Codes": rCreate = False
@@ -145,13 +145,13 @@ def mysql(rUsername, rPassword):
         rFile.write(rMySQLCnf)
         rFile.close()
         os.system("systemctl restart mariadb > /dev/null")
-    #printc("Enter MySQL Root Password:", col.WARNING)
+    #print("Enter MySQL Root Password:", col.WARNING)
     for i in range(5):
         rMySQLRoot = "" #raw_input("  ")
         print(" ")
         if len(rMySQLRoot) > 0: rExtra = " -p%s" % rMySQLRoot
         else: rExtra = ""
-        printc("Drop existing & create database? Y/N", col.WARNING)
+        print("Drop existing & create database? Y/N", col.WARNING)
         if input("  ").upper() == "Y": rDrop = True
         else: rDrop = False
         try:
@@ -167,7 +167,7 @@ def mysql(rUsername, rPassword):
             try: os.remove("/home/xtreamcodes/iptv_xtream_codes/database.sql")
             except: pass
             return True
-        except: printc("Invalid password! Try again", col.FAIL)
+        except: print("Invalid password! Try again", col.FAIL)
     return False
 
 def encrypt(rHost="127.0.0.1", rUsername="user_iptvpro", rPassword="", rDatabase="xtream_iptvpro", rServerID=1, rPort=7999):
@@ -179,7 +179,7 @@ def encrypt(rHost="127.0.0.1", rUsername="user_iptvpro", rPassword="", rDatabase
         rUsername = rDecrypt["db_user"]
         rDatabase = rDecrypt["db_name"]
         rPort = int(rDecrypt["db_port"])
-    printc("Encrypting...")
+    print("Encrypting...")
     try: os.remove("/home/xtreamcodes/iptv_xtream_codes/config")
     except: pass
 
@@ -196,7 +196,7 @@ def decrypt():
 
 
 def configure():
-    printc("Configuring System")
+    print("Configuring System")
     if not "/home/xtreamcodes/iptv_xtream_codes/" in open("/etc/fstab").read():
         rFile = open("/etc/fstab", "a")
         rFile.write("tmpfs /home/xtreamcodes/iptv_xtream_codes/streams tmpfs defaults,noatime,nosuid,nodev,noexec,mode=1777,size=90% 0 0\ntmpfs /home/xtreamcodes/iptv_xtream_codes/tmp tmpfs defaults,noatime,nosuid,nodev,noexec,mode=1777,size=2G 0 0")
@@ -229,12 +229,12 @@ def configure():
     if not "@reboot root /home/xtreamcodes/iptv_xtream_codes/start_services.sh" in open("/etc/crontab").read(): os.system('echo "@reboot root /home/xtreamcodes/iptv_xtream_codes/start_services.sh" >> /etc/crontab')
 
 def start(first=True):
-    if first: printc("Starting Xtream Codes")
-    else: printc("Restarting Xtream Codes")
+    if first: print("Starting Xtream Codes")
+    else: print("Restarting Xtream Codes")
     os.system("/home/xtreamcodes/iptv_xtream_codes/start_services.sh > /dev/null")
 
 def modifyNginx():
-    printc("Modifying Nginx")
+    print("Modifying Nginx")
     rPath = "/home/xtreamcodes/iptv_xtream_codes/nginx/conf/nginx.conf"
     rPrevData = open(rPath, "r").read()
     if not "listen 25500;" in rPrevData:
@@ -245,7 +245,7 @@ def modifyNginx():
         rFile.close()
 
 if __name__ == "__main__":
-    printc("X-UI 22f Mods Ubuntu 20.04 Installer - NeySlim", col.OKGREEN, 2)
+    print("X-UI 22f Mods Ubuntu 20.04 Installer - NeySlim", col.OKGREEN, 2)
 
     print(" ")
     rType = input("  Installation Type [MAIN, LB, ADMIN]: ")
@@ -265,7 +265,7 @@ if __name__ == "__main__":
         rDatabase = "xtream_iptvpro"
         rPort = 7999
         if len(rHost) > 0 and len(rPassword) > 0 and rServerID > -1:
-            printc("Start installation? Y/N", col.WARNING)
+            print("Start installation? Y/N", col.WARNING)
             if input("  ").upper() == "Y":
                 print(" ")
                 rRet = prepare(rType.upper())
@@ -276,29 +276,29 @@ if __name__ == "__main__":
                 configure()
                 if rType.upper() == "MAIN": modifyNginx()
                 start()
-                printc("Installation completed!", col.OKGREEN, 2)
+                print("Installation completed!", col.OKGREEN, 2)
                 if rType.upper() == "MAIN":
-                    printc("Please store your MySQL password!")
-                    printc(rPassword)
-                    printc("Admin UI Wan IP: http://%s:25500" % getIP())
-                    printc("Admin UI Lan IP: http://%s:25500" % getLanIP())
-                    printc("Admin UI default login is admin/admin")
+                    print("Please store your MySQL password!")
+                    print(rPassword)
+                    print("Admin UI Wan IP: http://%s:25500" % getIP())
+                    print("Admin UI Lan IP: http://%s:25500" % getLanIP())
+                    print("Admin UI default login is admin/admin")
                 rType = "UPDATE"
                 if os.path.exists("/home/xtreamcodes/iptv_xtream_codes/wwwdir/api.php"):
-                   printc("Update Admin Panel? Y/N?", col.WARNING)
+                   print("Update Admin Panel? Y/N?", col.WARNING)
                    if input("  ").upper() == "Y":
                       if not update(rType.upper()): sys.exit(1)
-                      printc("Installation completed!", col.OKGREEN, 2)
+                      print("Installation completed!", col.OKGREEN, 2)
                       start()
-                else: printc("Install Xtream Codes Main first!", col.FAIL)
-            else: printc("Installation cancelled", col.FAIL)
-        else: printc("Invalid entries", col.FAIL)
+                else: print("Install Xtream Codes Main first!", col.FAIL)
+            else: print("Installation cancelled", col.FAIL)
+        else: print("Invalid entries", col.FAIL)
     elif rType.upper() == "ADMIN":
         if os.path.exists("/home/xtreamcodes/iptv_xtream_codes/wwwdir/api.php"):
-            printc("Install/Update Admin Panel? Y/N?", col.WARNING)
+            print("Install/Update Admin Panel? Y/N?", col.WARNING)
             if input("  ").upper() == "Y":
                 if not update(rType.upper()): sys.exit(1)
-                printc("Installation completed!", col.OKGREEN, 2)
+                print("Installation completed!", col.OKGREEN, 2)
                 start()
-            else: printc("Install Xtream Codes Main first!", col.FAIL)
-    else: printc("Invalid installation type", col.FAIL)
+            else: print("Install Xtream Codes Main first!", col.FAIL)
+    else: print("Invalid installation type", col.FAIL)
