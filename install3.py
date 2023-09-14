@@ -265,10 +265,10 @@ def modifyNginx():
         rFile.close()
 
 if __name__ == "__main__":
-    printc("X-UI 22f Mods Ubuntu 20.04 Installer - NeySlim", col.OKGREEN, 2)
+    printc("X-UI 22f Mods Ubuntu 22.04 Installer - ROTTY", col.OKGREEN, 2)
 
     print(" ")
-    rType = input("  Installation Type [MAIN, LB, ADMIN]: ")
+    rType = raw_input("  Installation Type [MAIN, LB, ADMIN]: ")
     print(" ")
     if rType.upper() in ["MAIN", "LB"]:
         if rType.upper() == "LB":
@@ -286,7 +286,7 @@ if __name__ == "__main__":
         rPort = 7999
         if len(rHost) > 0 and len(rPassword) > 0 and rServerID > -1:
             printc("Start installation? Y/N", col.WARNING)
-            if input("  ").upper() == "Y":
+            if raw_input("  ").upper() == "Y":
                 print(" ")
                 rRet = prepare(rType.upper())
                 if not install(rType.upper()): sys.exit(1)
@@ -306,7 +306,7 @@ if __name__ == "__main__":
                 rType = "UPDATE"
                 if os.path.exists("/home/xtreamcodes/iptv_xtream_codes/wwwdir/api.php"):
                    printc("Update Admin Panel? Y/N?", col.WARNING)
-                   if input("  ").upper() == "Y":
+                   if raw_input("  ").upper() == "Y":
                       if not update(rType.upper()): sys.exit(1)
                       printc("Installation completed!", col.OKGREEN, 2)
                       start()
