@@ -25,6 +25,8 @@ wget https://github.com/leiaaloha/xtreamui_mirror/raw/master/install3.py;
 
 sudo python3 install3.py;
 
+### updated a few things tested, only issue I have found is VOD imdb not working correctly need to get working still. 
+
 ### Update 08/03/2021: ###
 - No planned update to come
 
@@ -49,8 +51,8 @@ Thanks to emre1393 for being the wisdom of xui community
 
 Update your ubuntu first, then install panel:
 ``` 
-sudo apt update && sudo apt full-upgrade -y && sudo apt install python2 -y;  
-wget https://github.com/NeySlim/xtreamui_mirror/raw/master/install.py; 
+sudo apt update && sudo apt full-upgrade -y && sudo apt install python2 -y;
+wget https://github.com/leiaaloha/xtreamui_mirror/raw/master/install.py; 
 sudo python2 install.py 
 ```
   
@@ -62,7 +64,4 @@ If you want to update admin panel, select UPDATE.
 
 [Xtream-UI Tutorials](https://www.youtube.com/playlist?list=PLJB51brdC_w7dTDxi1MPqiuk3JH5U2ekn "Xtream-UI Tutorials")
 
-```
-I accept Ethereum Donations
-ETH Wallet: 0x0f06D10Dd5CDb1ec1D24587F527c5695A9ef5C9f
-```
+
